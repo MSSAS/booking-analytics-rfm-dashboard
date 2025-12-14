@@ -1,0 +1,21 @@
+cat > .gitignore << 'EOF'
+# Python
+__pycache__/
+*.py[cod]
+*.log
+
+# Виртуальное окружение / env
+venv/
+.env
+
+# Node / Vite
+frontend/node_modules/
+frontend/dist/
+
+# Docker volumes
+pg_data/
+
+# IDE / редакторы
+.vscode/
+.idea/
+EOF

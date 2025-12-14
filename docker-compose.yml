@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: booking_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: booking_user
+      POSTGRES_PASSWORD: booking_password
+      POSTGRES_DB: booking_db
+    ports:
+      - "5433:5432"  # чтобы не конфликтовать с Airflow Postgres
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./db/02_seed_bookings.sql:/docker-entrypoint-initdb.d/02_seed_bookings.sql:ro
+
+    networks:
+      - analytics-net
+
+  backend:
+    build: ./backend
+    container_name: booking_backend
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: booking_user
+      DB_PASSWORD: booking_password
+      DB_NAME: booking_db
+      APP_PORT: 8000
+    ports:
+      - "8000:8000"
+    networks:
+      - analytics-net
+
+  frontend:
+    build: ./frontend
+    container_name: booking_frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "8081:80"
+    networks:
+      - analytics-net
+
+volumes:
+  pg_data:
+
+networks:
+  analytics-net:
+    external: true
