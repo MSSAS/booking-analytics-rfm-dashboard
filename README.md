@@ -64,7 +64,7 @@ Pet-проект: от сырых Excel-выгрузок бронировани�
 Требования: установлен Docker и Docker Compose.
 
 ```bash
-git clone https://github.com/<your-username>/booking-rfm-analytics.git
+git clone https://github.com/MSSAS/booking-rfm-analytics.git
 cd booking-rfm-analytics
 
 # Сеть (если ещё не создана)
